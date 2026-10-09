@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use Atelier, please cite the AI4Research ICML 2026 workshop paper."
+title: "Atelier: A Human-Owned Protocol for Auditable AI-Assisted Research"
+type: software
+authors:
+  - family-names: Geng
+    given-names: Yuchong
+  - family-names: Lu
+    given-names: Yuchen
+url: "https://openreview.net/forum?id=9h3ZudPP3G"
+repository-code: "https://github.com/Yuchong-Geng/atelier"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "Atelier: A Human-Owned Protocol for Auditable AI-Assisted Research"
+  authors:
+    - family-names: Geng
+      given-names: Yuchong
+    - family-names: Lu
+      given-names: Yuchen
+  conference:
+    name: "ICML 2026 Workshop on AI as a Tool for Mathematics, Computer Science, and Machine Learning"
+  year: 2026
+  url: "https://openreview.net/forum?id=9h3ZudPP3G"

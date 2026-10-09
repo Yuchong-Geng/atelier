@@ -1,0 +1,258 @@
+\section{Implementation Details}
+\label{app:implementation}
+
+\paragraph{Adapter boundary.}
+The protocol is agent-agnostic. Project files define the meaning of state, packets, reports, resolutions, evidence, and claims. Adapters define launch mechanics, prompts, tool calls, terminal commands, or manual handoff. Codex, Claude, Gemini, local scripts, and future tools participate as adapters around the same files. One project can use one manager, multiple workers, and fresh critics across different platforms without changing protocol semantics, and the file-backed state survives any change of platform.
+
+\paragraph{Skill library.}
+Atelier provides a library of skills, each defining a structured workflow that produces specific artifacts. Any agent role can invoke the relevant skill. Workers typically run the lifecycle-phase skills, critics run \texttt{second\_opinion}, and the manager runs \texttt{init}, \texttt{steer}, \texttt{update\_claim}, and \texttt{resolve\_report} over canonical state.
+
+\begin{center}
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}p{0.30\columnwidth}p{0.62\columnwidth}@{}}
+    \toprule
+    Skill & Trigger \\
+    \midrule
+    \texttt{init} & Start a new project or recover missing project state. \\
+    \texttt{orient} & Project lacks a stable problem frame, evaluation frame, source map, or next move. \\
+    \texttt{map\_related\_work} & Project needs a map of prior work, baselines, datasets, or field expectations. \\
+    \texttt{design\_evaluation} & Project needs an evaluation frame before planning experiments or comparing methods. \\
+    \texttt{develop\_method} & A proposed method, model, or artifact needs to become a working implementation. \\
+    \texttt{plan\_experiment} & A settled evaluation question should become a bounded experiment packet. \\
+    \texttt{evaluate\_evidence} & Accepted results, artifacts, or analyses should become a durable evidence record. \\
+    \texttt{update\_claim} & Evidence, reviews, or framing require creating, revising, or retiring a claim. \\
+    \texttt{bridge\_deliverable} & Claims, evidence, and audience need to be turned into a paper, report, or other deliverable plan. \\
+    \texttt{steer} & Choose the next research moves from durable state. \\
+    \texttt{second\_opinion} & A claim, evidence record, design, or section needs bounded critique from a fresh critic. \\
+    \texttt{resolve\_report} & A work or review item has a submitted report and needs manager resolution. \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\paragraph{Project layout.}
+An Atelier project lives under a \texttt{.atelier/} directory at the project root with the following layout.
+
+\begin{small}
+\begin{verbatim}
+.atelier/
+|- project.yaml
+|- state/current.md
+|- briefs/
+|  |- project.md
+|  \- deliverable.md
+|- resources/index.md
+|- work/
+|  |- pending/
+|  |- active/<W-id>/
+|  |  |- packet.md
+|  |  |- report.md
+|  |  \- resolution.md
+|  |- reported/
+|  \- closed/
+|- reviews/
+|  |- pending/
+|  |- active/<R-id>/
+|  |  |- packet.md
+|  |  |- report.md
+|  |  \- resolution.md
+|  |- reported/
+|  \- closed/
+|- evidence/<E-id>.md
+|- claims/<C-id>.md
+\- logs/
+   |- research-log.md
+   \- decisions.md
+\end{verbatim}
+\end{small}
+
+Top-level files carry the project configuration, the current focus, the project and deliverable briefs, and the source map. The \texttt{work/} and \texttt{reviews/} queues organize their entries through \texttt{pending}, \texttt{active}, \texttt{reported}, and \texttt{closed} subdirectories. Each unit materializes as \texttt{packet.md}, an optional \texttt{progress.md}, \texttt{report.md}, and \texttt{resolution.md}. Evidence records and claims accumulate under \texttt{evidence/} and \texttt{claims/} keyed by identifier. All files are markdown with structured frontmatter, so an agent can act on them and a researcher can read them directly.
+
+\section{Evaluation Details}
+\label{app:evaluation-details}
+
+Each rubric dimension is scored as 0, 1, or 2. A score of 0 means absent or materially wrong. A score of 1 means partially present but vague, incomplete, or not actionable. A score of 2 means clear, task-specific, and useful.
+
+\paragraph{Orientation rubric.}
+The maximum score is 20. Severe errors are recorded separately for materially misleading claims, ignored executable-artifact constraints, invented official rules, the absence of a concrete first experiment, or, in the Atelier condition, material project record writes without explicit user approval.
+
+\begin{center}
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}p{0.38\columnwidth}p{0.54\columnwidth}@{}}
+    \toprule
+    Dimension & What the dimension measures \\
+    \midrule
+    Hidden structure recovery & Recovers the vague idea as a per-task tiny executable-artifact problem for ARC-like transformations. \\
+    Constraint capture & Captures CPU limits, compactness, executable-artifact constraints, and possible static-shape or operation-set issues. \\
+    Method framing & Frames the problem as rule inference plus artifact emission, program synthesis, compiler design, or neural circuit synthesis. \\
+    Rationale and landscape & Explains why the framing might work, names nearby approaches, and avoids treating the landscape as settled without inspection. \\
+    Evaluation design & Separates correctness from compactness and defines support, weakening, or falsification criteria. \\
+    Gap-exposing tests & Proposes tests that could reveal failures of ordinary training, written solvers, overfitting, artifact constraints, or benchmark mismatch. \\
+    Question quality and interaction use & Asks decision-level questions when useful and uses replies to sharpen the frame rather than restating generic advice. \\
+    Bounded next steps & Produces a first action that can start on ordinary CPU resources. \\
+    Recoverability & Leaves artifacts or structured state that a future agent can resume from. \\
+    Claim and write-gate discipline & Avoids claiming benchmark performance or competition compliance, and in the Atelier condition respects the lack of write approval. \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\paragraph{Lifecycle rubric.}
+The maximum score is 20. Severe errors are recorded separately for materially misleading claims, ignored executable-artifact constraints, invented official rules, or the absence of a concrete first experiment.
+
+\begin{center}
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}p{0.38\columnwidth}p{0.54\columnwidth}@{}}
+    \toprule
+    Dimension & What the dimension measures \\
+    \midrule
+    Hidden structure recovery & Recovers the vague idea as a tiny executable-artifact problem for ARC-like transformations. \\
+    Constraint capture & Captures CPU limits, compactness, executable artifacts, and static-shape or operation-set constraints. \\
+    Method framing & Frames the problem as rule inference, artifact emission, program synthesis, or neural circuit synthesis. \\
+    Evaluation design & Separates correctness from compactness and defines support or falsification criteria. \\
+    Bounded next steps & Produces a first action that can start immediately. \\
+    Use of interaction & Uses clarification turns to improve the direction. \\
+    Critique and revision & Surfaces risks and revises the plan in response to critique or new constraints. \\
+    Recoverability & Leaves artifacts or structured state that a future agent can resume from. \\
+    Claim discipline & Avoids claiming benchmark performance, solved ARC, or verified official competition compliance. \\
+    Workshop usefulness & Produces evidence relevant to correctness, reproducibility, workflow decomposition, and research steering. \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\paragraph{Artifact inventory.}
+The lifecycle sweep records the delegation and critique chain that the freeform baseline does not expose. Orientation-sweep runs produce the initialized project state only, since the simulated user never grants write approval.
+
+\begin{center}
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}p{0.48\columnwidth}cc@{}}
+    \toprule
+    Artifact & Freeform baseline & Atelier (lifecycle) \\
+    \midrule
+    Transcript & recorded & recorded \\
+    Final research plan & recorded & recorded \\
+    Project state & absent & recorded \\
+    Project brief & absent & recorded \\
+    Work packet & absent & recorded \\
+    Worker report & absent & recorded \\
+    Manager work resolution & absent & recorded \\
+    Review packet & absent & recorded \\
+    Critic report & absent & recorded \\
+    Manager review resolution & absent & recorded \\
+    Deliverable brief & absent & recorded \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\paragraph{Per-run scores.}
+\Cref{tab:orient-per-run,tab:lifecycle-per-run} report the per-dimension scores for every run in the two sweeps.
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}llrrrrrrrrrrr@{}}
+    \toprule
+    Setting & Condition & Hidden structure & Constraints & Method & Landscape & Evaluation & Gap tests & Questions & Next steps & Recovery & Write-gate & Total \\
+    \midrule
+    GPT-5.2, medium      & Baseline & 2 & 1 & 2 & 1 & 2 & 1 & 1 & 2 & 1 & 2 & 15 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 1 & 2 & 2 & 2 & 19 \\
+    GPT-5.4-Mini, medium & Baseline & 2 & 1 & 2 & 1 & 1 & 1 & 2 & 2 & 1 & 2 & 15 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 1 & 2 & 2 & 2 & 19 \\
+    GPT-5.5, low         & Baseline & 2 & 1 & 2 & 1 & 2 & 1 & 2 & 2 & 2 & 2 & 17 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 20 \\
+    GPT-5.5, medium      & Baseline & 2 & 2 & 2 & 1 & 2 & 2 & 2 & 2 & 1 & 2 & 18 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 20 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Orientation sweep per-run scores.}
+  \label{tab:orient-per-run}
+\end{table*}
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}llrrrrrrrrrrr@{}}
+    \toprule
+    Setting & Condition & Hidden structure & Constraints & Method & Evaluation & Next steps & Interaction & Critique & Recovery & Claim discipline & Workshop & Total \\
+    \midrule
+    GPT-5.2, medium      & Baseline & 2 & 2 & 2 & 2 & 2 & 1 & 1 & 1 & 2 & 1 & 16 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 1 & 19 \\
+    GPT-5.4-Mini, medium & Baseline & 2 & 2 & 2 & 2 & 2 & 2 & 1 & 1 & 2 & 2 & 18 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 20 \\
+    GPT-5.5, low         & Baseline & 2 & 2 & 2 & 1 & 2 & 2 & 1 & 1 & 2 & 1 & 16 \\
+                         & Atelier  & 2 & 2 & 2 & 1 & 2 & 2 & 2 & 2 & 2 & 1 & 18 \\
+    GPT-5.5, medium      & Baseline & 2 & 2 & 2 & 1 & 2 & 2 & 1 & 1 & 2 & 1 & 16 \\
+                         & Atelier  & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 20 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Lifecycle sweep per-run scores.}
+  \label{tab:lifecycle-per-run}
+\end{table*}
+
+\paragraph{Sample outputs.}
+The preliminary orientation run uses the user prompt below, with three scripted follow-up replies, and ends with each condition's final-orientation summary. The boxes that follow reproduce the prompt and summaries from the run artifacts.
+
+\begin{tcolorbox}[
+  colback=orange!5,
+  colframe=orange!50,
+  title=User prompt,
+  fonttitle=\bfseries\small,
+  fontupper=\small,
+  arc=2pt,
+  boxsep=3pt,
+  left=4pt, right=4pt, top=3pt, bottom=3pt
+]
+\textbf{Initial.} I'm interested in whether small neural networks can solve ARC-style grid transformation tasks. I don't want a giant model. Ideally each task would have a tiny executable model that transforms inputs correctly. I'm not sure whether this is a learning problem, a program synthesis problem, or something else. Help me turn this into a research direction.
+
+\textbf{Reply 1.} I care more about getting a concrete research direction and first experiment than about solving many tasks today. I only have ordinary laptop or CPU resources right now.
+
+\textbf{Reply 2.} I want the final artifact to be something like a tiny executable model per task, not just a written solver. I am also curious whether this could eventually map to a constrained benchmark or competition.
+
+\textbf{Reply 3.} Please make the next step something I could realistically start today.
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  colback=gray!6,
+  colframe=gray!50,
+  title=Baseline,
+  fonttitle=\bfseries\small,
+  fontupper=\small,
+  arc=2pt,
+  boxsep=3pt,
+  left=4pt, right=4pt, top=3pt, bottom=3pt
+]
+This should be framed as \textbf{task-specific neural program synthesis}, not ordinary neural training and not pure symbolic ARC solving.
+
+The research direction is to search for a tiny executable model per task, with strict limits on parameter count, inference steps, and allowed features. The scientific question is whether ARC-style transformations can be compressed into very small grid-aware neural mechanisms that generalize from a few examples.
+
+A realistic first experiment is a CPU-friendly toy ARC benchmark with generated tasks. Start with five transformation families, train one tiny coordinate-conditioned MLP per task, and evaluate exact-match accuracy on hidden generated examples. Keep the model small enough that the artifact itself is meaningful.
+
+The immediate deliverable is not a full ARC solver. It is evidence about whether tiny per-task executable neural models are viable at all, and which inductive biases matter.
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  colback=blue!4,
+  colframe=blue!40,
+  title=Atelier,
+  fonttitle=\bfseries\small,
+  fontupper=\small,
+  arc=2pt,
+  boxsep=3pt,
+  left=4pt, right=4pt, top=3pt, bottom=3pt
+]
+The project frame is compression-constrained per-task neural induction for ARC-style grid transformations.
+
+The research question is whether each ARC-style task can be represented by a tiny executable learned model that maps inputs to outputs, without relying on a giant pretrained model or only returning a written solver.
+
+The proposed first method is a per-task tiny Neural Cellular Automaton or small convolutional transition system. Each task gets its own fitted parameters and rollout count. The executable artifact is the fixed runtime plus the learned task artifact.
+
+The first experiment should be CPU-scale and start today. Select 5 to 8 ARC public training tasks by visual inspection. Train one tiny model per task from scratch. Evaluate exact-grid match, leave-one-example-out behavior where possible, serialized artifact size, parameter count, train time, inference time, rollout steps, and failure type.
+
+The evaluation should include a compact symbolic baseline for simple color maps, copies, crops, and fills. This prevents the project from mistaking a weak learned artifact for progress when a smaller symbolic artifact solves the same task.
+
+The likely eventual benchmark frame is NeuroGolf-style scoring: solve ARC-style tasks with the smallest executable per-task artifact under explicit CPU, size, and task-specific-engineering limits.
+\end{tcolorbox}

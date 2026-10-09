@@ -1,0 +1,43 @@
+\section{Evaluation}
+\label{sec:evaluation}
+
+The evaluation probes three method claims about workflow quality, inspectability, and recoverability.
+
+\paragraph{Setup.}
+We simulate a user interacting with two AI conditions, a freeform agent and Atelier. The research direction is NeuroGolf~2026~\citep{neurogolf2026}, an active Kaggle competition asking for the smallest neural networks that solve ARC-AGI grid transformations. A vague multi-turn prompt with scripted user replies drives interaction and holds user input constant across conditions. The baseline writes a final research plan from the prompt. Atelier runs the file-backed protocol over the same prompt, either through orientation alone or through the full manager-worker-critic loop. Outputs are scored on 20-point manual rubrics covering hidden-structure recovery, constraint capture, method framing, evaluation design, recoverability, and related dimensions. \Cref{app:evaluation-details} lists both rubrics, the artifact inventory, and per-run scores.
+
+The two sweeps probe two questions. First, does Atelier turn a vague research idea into a more actionable plan? Both sweeps test this, with the orientation sweep isolating Atelier's first phase and the lifecycle sweep running the full manager-worker-critic loop. Second, does the protocol hold under model variation? Each sweep covers four model and effort settings, probing \cref{assumption:bounded-sufficiency}, the claim that bounded packets carry weaker models.
+
+\begin{table}[t]
+  \centering
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    Setting & Baseline & Atelier & Gain \\
+    \midrule
+    \multicolumn{4}{@{}l@{}}{\emph{Orientation sweep (/20)}} \\
+    GPT-5.2, medium & 15 & 19 & +4 \\
+    GPT-5.4-Mini, medium & 15 & 19 & +4 \\
+    GPT-5.5, low & 17 & 20 & +3 \\
+    GPT-5.5, medium & 18 & 20 & +2 \\
+    \quad mean across four settings & 16.25 & 19.5 & +3.25 \\
+    \midrule
+    \multicolumn{4}{@{}l@{}}{\emph{Lifecycle sweep (/20)}} \\
+    GPT-5.2, medium & 16 & 19 & +3 \\
+    GPT-5.4-Mini, medium & 18 & 20 & +2 \\
+    GPT-5.5, low & 16 & 18 & +2 \\
+    GPT-5.5, medium & 16 & 20 & +4 \\
+    \quad mean across four settings & 16.5 & 19.25 & +2.75 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Pilot study results. See \Cref{app:evaluation-details} for rubrics and per-run scores.}
+  \label{tab:evaluation-results}
+\end{table}
+
+\paragraph{Workflow quality.}
+The rubric scores measure how well an output meets the desiderata of early research, such as a captured problem frame, evaluation criteria, and recoverable state. Atelier's outputs score higher than the baseline's in both sweeps. The mean rises from 16.25 to 19.5 out of 20 in the orientation sweep and from 16.5 to 19.25 in the lifecycle sweep. The improvement holds across all four model and effort settings, including the weakest.
+
+\paragraph{Auditability and recoverability.}
+The lifecycle runs produced canonical state, briefs, packets, reports, and resolutions inventoried in \Cref{app:evaluation-details}. The freeform baseline produced only a transcript and a final plan. The difference matters for two reasons. A researcher can read the chain that produced each claim, and a later agent can resume from canonical state without replaying the conversation. Several lifecycle runs also encountered model and platform failures during execution, providing an unplanned test of the recovery story. The file-backed state surfaced those failures and allowed recovery from canonical state, with the final claims remaining valid.
+

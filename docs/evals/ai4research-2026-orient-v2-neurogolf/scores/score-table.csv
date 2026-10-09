@@ -1,0 +1,11 @@
+run,model,effort,condition,total,hidden_structure,constraint_capture,method_framing,rationale_landscape,evaluation_design,gap_exposing_tests,question_quality,bounded_next_steps,recoverability,claim_write_gate,severe_errors
+current,inherited-default,medium,baseline,16,2,1,2,1,2,1,2,2,1,2,none
+current,inherited-default,medium,research-agent,20,2,2,2,2,2,2,2,2,2,2,none
+reference-default-medium,inherited-default,medium,baseline,18,2,2,2,1,2,2,2,2,1,2,none
+reference-default-medium,inherited-default,medium,research-agent,20,2,2,2,2,2,2,2,2,2,2,none
+default-low,inherited-default,low,baseline,17,2,1,2,1,2,1,2,2,2,2,none
+default-low,inherited-default,low,research-agent,20,2,2,2,2,2,2,2,2,2,2,none
+gpt-5.4-mini-medium,gpt-5.4-mini,medium,baseline,15,2,1,2,1,1,1,2,2,1,2,none
+gpt-5.4-mini-medium,gpt-5.4-mini,medium,research-agent,19,2,2,2,2,2,2,1,2,2,2,none
+gpt-5.2-medium,gpt-5.2,medium,baseline,15,2,1,2,1,2,1,1,2,1,2,none
+gpt-5.2-medium,gpt-5.2,medium,research-agent,19,2,2,2,2,2,2,1,2,2,2,none

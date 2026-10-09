@@ -1,0 +1,25 @@
+project:
+  id: project-slug
+  name: Project Name
+  mode: scholar
+  created: YYYY-MM-DD
+
+manager:
+  current_owner: platform-name
+
+critics:
+  enabled: false
+  platforms: []
+
+resources:
+  index: resources/index.md
+
+repos: []
+
+artifact_roots: []
+
+compute:
+  platforms: []
+
+adapters:
+  root_entrypoints: []

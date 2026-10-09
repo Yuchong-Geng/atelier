@@ -1,0 +1,14 @@
+items: []
+
+# Example entry:
+# - id: W-YYYYMMDD-001
+#   title: Short work title
+#   status: pending
+#   kind: experiment
+#   priority: medium
+#   effort: medium
+#   approval_policy: manager_review
+#   compute_kind: none
+#   owner: unassigned
+#   path: work/pending/W-YYYYMMDD-001
+#   updated: YYYY-MM-DD

@@ -1,0 +1,11 @@
+items: []
+
+# Example entry:
+# - id: C001
+#   title: Short claim title
+#   status: active
+#   claim_kind: method
+#   support_level: weak
+#   evidence_links: []
+#   path: claims/C001.md
+#   updated: YYYY-MM-DD

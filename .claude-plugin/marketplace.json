@@ -1,0 +1,21 @@
+{
+  "name": "atelier",
+  "owner": {
+    "name": "Atelier Project"
+  },
+  "metadata": {
+    "description": "File-backed Atelier workflow for reusable AI-assisted research across Codex, Claude, and other agents.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "atelier",
+      "description": "Research workflow control plane with project-local state, work packets, evidence records, claims, reviews, and cross-platform second opinions.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./packages/skills/atelier"
+      ]
+    }
+  ]
+}

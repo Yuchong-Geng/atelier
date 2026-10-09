@@ -1,0 +1,17 @@
+.DS_Store
+
+# Local caches and generated files
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+build/
+.superpowers/
+
+# External reference repo. Keep the written read in docs/source-repo-read.md.
+references/AI-research-SKILLs/
+
+# Generated evaluation traces. Keep curated eval summaries, rubrics, prompts,
+# score tables, and paper notes trackable under docs/evals/.
+docs/evals/**/runs/
+docs/evals/**/run-errors/

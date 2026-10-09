@@ -1,0 +1,13 @@
+items: []
+
+# Example entry:
+# - id: R-YYYYMMDD-001
+#   title: Short review title
+#   status: pending
+#   review_type: claim
+#   review_mode: standard
+#   target: artifact-id-or-path
+#   blocking: false
+#   owner: unassigned
+#   path: reviews/pending/R-YYYYMMDD-001
+#   updated: YYYY-MM-DD

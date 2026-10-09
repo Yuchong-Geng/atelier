@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+import process from "node:process";
+
+import { runCli } from "../packages/skills/atelier/scripts/cli.mjs";
+
+runCli().catch((error) => {
+  process.stderr.write(`atelier failed: ${error.message}\n`);
+  process.exit(1);
+});

@@ -1,0 +1,9 @@
+run,model,effort,condition,hidden_structure_recovery,constraint_capture,method_framing,evaluation_design,bounded_next_steps,use_of_interaction,critique_and_revision,recoverability,claim_discipline,workshop_usefulness,total,severe_errors
+reference-default-medium,inherited-default,medium,baseline,2,2,2,1,2,2,1,1,2,1,16,"none"
+reference-default-medium,inherited-default,medium,research-agent-fullstate,2,2,2,2,2,2,2,2,2,2,20,"none"
+default-low,inherited-default,low,baseline,2,2,2,1,2,2,1,1,2,1,16,"none"
+default-low,inherited-default,low,research-agent-fullstate,2,2,2,1,2,2,2,2,2,1,18,"none"
+gpt-5.4-mini-medium,gpt-5.4-mini,medium,baseline,2,2,2,2,2,2,1,1,2,2,18,"none"
+gpt-5.4-mini-medium,gpt-5.4-mini,medium,research-agent-fullstate,2,2,2,2,2,2,2,2,2,2,20,"none"
+gpt-5.2-medium,gpt-5.2,medium,baseline,2,2,2,2,2,1,1,1,2,1,16,"none"
+gpt-5.2-medium,gpt-5.2,medium,research-agent-fullstate,2,2,2,2,2,2,2,2,2,1,19,"none"

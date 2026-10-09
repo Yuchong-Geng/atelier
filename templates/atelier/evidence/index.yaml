@@ -1,0 +1,14 @@
+items: []
+
+# Example entry:
+# - id: E001
+#   title: Short evidence title
+#   status: active
+#   evidence_kind: experiment
+#   strength: weak
+#   deliverable_use: maybe
+#   claim_links: []
+#   source_work: W-YYYYMMDD-001
+#   source_resolution: work/closed/YYYY-MM/W-YYYYMMDD-001/resolution.md
+#   path: evidence/E001.md
+#   updated: YYYY-MM-DD

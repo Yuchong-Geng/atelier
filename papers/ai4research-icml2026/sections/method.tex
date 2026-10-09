@@ -1,0 +1,149 @@
+\begin{figure}[t]
+  \centering
+  \resizebox{\columnwidth}{!}{%
+  \begin{tikzpicture}[
+    x=1in,
+    y=1in,
+    font=\scriptsize,
+    >=Latex,
+    layer/.style={draw=black!32, rounded corners=3pt, fill=black!1, line width=0.45pt},
+    rail/.style={draw=black!42, rounded corners=3pt, fill=black!2, line width=0.45pt},
+    layerlabel/.style={font=\bfseries\scriptsize, anchor=west, text=black!62},
+    iconcircle/.style={draw=black!35, circle, fill=white, minimum size=0.15in, inner sep=0pt},
+    iconline/.style={draw=black!52, line width=0.33pt},
+    actor/.style={draw=black!55, rounded corners=2pt, fill=blue!6, align=center, minimum width=0.90in, minimum height=0.31in, inner sep=2.5pt},
+    managerrole/.style={actor, fill=orange!10},
+    agent/.style={actor, fill=violet!7},
+    artifact/.style={draw=black!55, rounded corners=2pt, fill=green!7, align=center, minimum width=0.62in, minimum height=0.22in, inner sep=2pt},
+    report/.style={artifact, fill=violet!7},
+    decision/.style={artifact, fill=orange!12},
+    note/.style={font=\scriptsize, align=center, text=black!58},
+    arrow/.style={-{Latex[length=1.6mm]}, line width=0.48pt, draw=black!70},
+    softarrow/.style={-{Latex[length=1.4mm]}, line width=0.42pt, draw=black!45, dashed},
+    biarrow/.style={{Latex[length=1.4mm]}-{Latex[length=1.4mm]}, line width=0.45pt, draw=black!58},
+    tracearrow/.style={-{Latex[length=1.3mm]}, line width=0.38pt, draw=green!38!black}
+  ]
+    \node[layer, fill=blue!2, minimum width=1.90in, minimum height=0.80in, anchor=north west] (humanlayer) at (0,0) {};
+    \node[layer, fill=orange!3, minimum width=1.90in, minimum height=0.80in, anchor=north west] (managerlayer) at (0,-1.10) {};
+    \node[layer, fill=violet!3, minimum width=1.90in, minimum height=0.80in, anchor=north west] (agentlayer) at (0,-2.20) {};
+    \node[rail, minimum width=0.92in, minimum height=3.00in, anchor=north west] (trace) at (2.03,0) {};
+
+    \node[iconcircle] (humanicon) at ($(humanlayer.north west)+(0.15,-0.14)$) {};
+    \draw[iconline] ($(humanicon.center)+(0,0.025)$) circle (0.020);
+    \draw[iconline] ($(humanicon.center)+(-0.035,-0.045)$) arc[start angle=205,end angle=-25,radius=0.040];
+    \node[layerlabel] at ($(humanlayer.north west)+(0.27,-0.10)$) {human layer};
+
+    \node[iconcircle] (managericon) at ($(managerlayer.north west)+(0.15,-0.14)$) {};
+    \draw[iconline] ($(managericon.center)+(-0.032,0.038)$) rectangle ($(managericon.center)+(0.032,-0.042)$);
+    \draw[iconline] ($(managericon.center)+(-0.020,0.016)$) -- ($(managericon.center)+(0.020,0.016)$);
+    \draw[iconline] ($(managericon.center)+(-0.020,-0.005)$) -- ($(managericon.center)+(0.020,-0.005)$);
+    \node[layerlabel] at ($(managerlayer.north west)+(0.27,-0.10)$) {manager layer};
+
+    \node[iconcircle] (agenticon) at ($(agentlayer.north west)+(0.15,-0.18)$) {};
+    \draw[iconline] ($(agenticon.center)+(-0.030,0.018)$) circle (0.015);
+    \draw[iconline] ($(agenticon.center)+(0.030,0.018)$) circle (0.015);
+    \draw[iconline] ($(agenticon.center)+(0,-0.030)$) circle (0.015);
+    \draw[iconline] ($(agenticon.center)+(-0.016,0.008)$) -- ($(agenticon.center)+(-0.004,-0.017)$);
+    \draw[iconline] ($(agenticon.center)+(0.016,0.008)$) -- ($(agenticon.center)+(0.004,-0.017)$);
+    \node[layerlabel, align=left] at ($(agentlayer.north west)+(0.27,-0.12)$) {sub-agent\\[-2pt]layer};
+    \node[font=\bfseries\scriptsize, text=black!62, anchor=north] at ($(trace.north)+(0,-0.08)$) {auditable trace};
+
+    \node[actor, minimum width=0.95in] (human) at (0.95,-0.40) {researcher};
+    \node[managerrole, minimum width=0.95in] (manager) at (0.95,-1.50) {manager};
+    \node[agent, minimum width=0.95in] (subagents) at (0.95,-2.60) {worker / critic};
+
+    \node[artifact, fill=orange!12] (brief) at (2.49,-0.40) {briefs\\state};
+    \node[artifact, fill=orange!12] (claim) at (2.49,-0.95) {claims};
+    \node[artifact, fill=orange!12] (evidence) at (2.49,-1.50) {evidence};
+    \node[decision] (resolution) at (2.49,-2.05) {resolution};
+    \node[report] (report) at (2.49,-2.60) {reports};
+    \node[font=\tiny, text=black!45, rotate=90] at (2.89,-1.225) {manager edits};
+    \node[font=\tiny, text=black!45] at (2.49,-2.85) {subagent writes};
+
+    \draw[biarrow] (human.south) -- node[right, note, xshift=0.02in] {iterative\\discussion} (manager.north);
+    \draw[softarrow] (human.east) -- ($(trace.west |- human.east)$);
+    \draw[biarrow] (manager.east) -- ($(trace.west |- manager.east)$);
+    \node[note, anchor=south] at (1.65,-0.39) {inspect};
+    \node[note, anchor=south] at (1.65,-1.49) {read/write};
+
+    \draw[arrow] (manager.south) -- node[note, anchor=west, xshift=0.04in, pos=0.5] {packet} (subagents.north);
+    \draw[arrow] (subagents.east) -- (report.west);
+    \node[note, anchor=south] at (1.65,-2.59) {feedback};
+
+    \draw[tracearrow] (report.north) -- (resolution.south);
+    \draw[tracearrow] (resolution.north) -- (evidence.south);
+    \draw[tracearrow] (evidence.north) -- (claim.south);
+    \draw[tracearrow] (claim.north) -- (brief.south);
+  \end{tikzpicture}}
+  \caption{Atelier as a layered protocol for AI-assisted research, backed by human-auditable files. The researcher steers from the top layer, the manager owns canonical state and resolves work in the middle, and workers or critics operate inside scoped packets at the bottom. On the right, the audit trace records the chain. Subagents write reports, and the manager edits them into resolutions, evidence, claims, and researcher-facing briefs.}
+  \label{fig:layered-protocol}
+\end{figure}
+
+\section{Method}
+\label{sec:method}
+
+Atelier is designed to start where research starts, with a vague idea. The human researcher may bring an unrefined direction, a half-formed mechanism, or a question they cannot yet phrase precisely. Orientation, the protocol's first phase, turns that intent into a working problem statement, evaluation criteria, assumptions, a source map, and a next move. The system's broader output, across the full lifecycle, is a set of auditable evidence-backed claims. \Cref{fig:layered-protocol} previews the layered protocol, showing the three role layers and the audit trace that the rest of the section develops.
+
+The protocol organizes work around a research lifecycle that loops rather than progresses linearly. Any phase may revise an earlier one when evidence, sources, or critic findings demand it. Within each phase, agent contributions move through a recorded chain. A worker or critic submits a report, the manager's resolution of that report decides what becomes evidence, and claims summarize what the evidence supports. The looped lifecycle and the recorded chain together make research iterative, recoverable, and legible to a human reviewer.
+
+Three principles guide our design.
+
+\begin{enumerate}
+  \item \textbf{Governed discovery over metric chasing.} Research stays tied to problem framing, assumptions, falsification criteria, evidence, and claim scope. Metrics are evidence inside a research argument rather than the whole objective.
+  \item \textbf{Human-owned steering.} The researcher remains responsible for research direction, problem framing, and final claim acceptance. The agent may propose, critique, run bounded work, and surface tradeoffs, but it does not silently redefine the research question.
+  \item \textbf{Bounded agency with constructive dissent.} The assistant exercises the bounded autonomy of a mature PhD researcher working under a rigorous advisor. It raises objections, proposes alternatives, and identifies weak evidence, but only through scoped packets, recorded reports, and manager resolution.
+\end{enumerate}
+
+\subsection{Assumptions}
+
+The principles rest on three claims about how agent-assisted research actually fails.
+
+\begin{assumption}[Information flow]
+\label{assumption:info-flow}
+Let $Z$ denote the scientific target of interest. Let $U=(\theta, C_0, S_0)$ denote the agent's initial information, including model parameters, user context, and initially available sources. If an agent produces later turns $T_{1:k}$ only by processing $U$, then $Z \rightarrow U \rightarrow T_{1:k}$ is an information-processing chain, and the data processing inequality gives $I(Z; T_{1:k}) \leq I(Z; U)$.
+\end{assumption}
+
+Additional turns may make latent information easier to use, but they do not by themselves add information about $Z$. New information about $Z$ enters the loop only through observations from outside the agent's self-processing path. Without explicit separation, each observation folds into the agent's state without leaving a distinct trace, so the loop's output $T_k$ is indistinguishable from a function of the agent's initial context. The data processing inequality then bounds $T_k$ by the information already in that context (model parameters, user-supplied context, and initially available sources). Atelier therefore records observations as artifacts distinct from agent reasoning, so the entry of new information into the chain is preserved.
+
+\begin{assumption}[Bounded sufficiency]
+\label{assumption:bounded-sufficiency}
+For many bounded research subtasks, a less capable or lower-budget model can match a stronger one once both are above the task-specific competence threshold and the harness, context, scope, and acceptance criteria are correct.
+\end{assumption}
+
+A naive workflow assigns every step to the strongest available model and asks it to hold the whole project state. \cref{assumption:bounded-sufficiency} shifts the question from project-wide capability to task-level sufficiency. Once the manager scopes a bounded packet with explicit context, expected output, stopping rule, and escalation criteria, a smaller or lower-budget worker can complete it. Atelier therefore concentrates the manager's effort on packet framing rather than on selecting the strongest model for every step.
+
+\begin{assumption}[Sub-agent independence]
+\label{assumption:sub-agent-independence}
+A sub-agent operating in a scoped packet with a fresh session, especially one using a different model family, platform, prompt context, or tool surface, reduces correlated failure modes with the calling agent.
+\end{assumption}
+
+Workers and critics each operate in a scoped packet with a fresh session, focused on the packet's content rather than project-wide state. For critics, the fresh session also breaks correlation with the original agent's state, surfacing unsupported assumptions, missing evidence, scope drift, brittle reasoning, and weak experiment design that the original agent missed. The critic is not an oracle and can hallucinate or miss errors in turn, but the value is independence, not infallibility. Atelier therefore makes review a first-class operation, with critic packets optionally executed on a different model family or platform.
+
+\subsection{Research Lifecycle}
+
+An Atelier project begins with orientation, then moves through problem framing, related-work mapping, evaluation design, method development, experiment planning, evidence evaluation, claim update, and deliverable packaging. Orientation is the collaborative entry point to our workflow via an iterative dialogue between manager and user. The user opens the dialogue with a research idea at any level of specificity, from a finished draft to a one-sentence intent. The manager inspects available files and runs a light related-work check, drafting candidate framings and surfacing tradeoffs and gaps for the user to weigh, while the user contributes judgment on ambition, risk, and priority. The exchange sharpens the research direction and helps the user navigate the landscape. Subsequent phases each carry one or more work packets through the chain, accumulating evidence and updating claims.
+
+The manager keeps a current focus that names the active phase, a dominant lens rather than a lock. A paper-writing focus may still trigger experiment planning when a draft exposes an evidence gap. A method development focus may still trigger related-work mapping when a baseline turns out to be unstable. The user can override the current focus at any decision point. The manager proposes the next move based on the current focus, the open packets, and the resolved evidence, rather than enforcing a fixed phase order.
+
+\subsection{Roles and Authority}
+
+Atelier separates human, manager, worker, and critic authority. The human owns research direction and final acceptance of high-level claims. The manager owns canonical project state (current focus, claims, evidence, work and review queues, resolutions, decisions, deliverable readiness, and user communication), dispatches bounded packets to workers and critics, and advises the human on next moves and tradeoffs. Workers and critics operate inside those packets, an arrangement that rests on \cref{assumption:bounded-sufficiency} and \cref{assumption:sub-agent-independence}. Once context, scope, and acceptance criteria are explicit, a smaller or lower-budget agent can complete a well-defined sub-task without holding the entire project state.
+
+A worker performs one scoped task, writes a report, and stops. A critic, optionally on a different model family or platform, reviews one bounded target (a claim, evidence record, experiment design, mathematical argument, code change, paper draft, or steering decision), writes findings, and stops. Workers and critics may propose evidence records, claim edits, or state changes in their reports, but they do not update canonical state. This authority boundary keeps human-owned steering intact under critic disagreement and enacts bounded agency by scoping agent autonomy to the packet.
+
+Roles are logical rather than tied to a specific execution context (model instance, thread, session, or chat). A manager may take on a worker packet itself for tasks that warrant close manager attention, such as high-consequence steps that may need frequent human intervention. The same file-backed protocol applies regardless of who plays the role or on which platform.
+
+\subsection{File-Backed Communication}
+
+Agent communication under \texttt{.atelier/} flows through a fixed chain of markdown artifacts (packet, progress, report, resolution) into the canonical update they produce. Each file has structured frontmatter, concise enough for agents to act on and readable enough for the human to follow directly. The manager creates \texttt{packet.md} for one unit of work, recording intent, scope, context, expected output, and approval policy. The assigned worker reads the instructions from \texttt{packet.md} and creates and updates \texttt{progress.md} for volatile operational state when work is long-running, external, costly, or hard to recover from chat alone. The worker or critic submits \texttt{report.md} as the unit's output. The manager digests sub-agents' \texttt{report.md} and writes \texttt{resolution.md} as the accepted interpretation.
+
+The chain enforces \cref{assumption:info-flow} by giving an agent's processing and the manager's accepted reading distinct artifact types. The same chain serves as an audit trail for the human. Reports are not edited after submission, and disagreement is recorded in \texttt{resolution.md} rather than rewritten into the report. A later manager session can recover by reading the project manifest, current state, queue indexes, recent packets, submitted reports, and closed resolutions.
+
+\subsection{Evidence and Claims}
+
+The chain's report-evidence-claim distinction enacts Principle 1, governed discovery over metric chasing. Evidence is the manager's accepted reading of a concrete artifact, result, source, observation, or experiment output. Claims summarize what the evidence supports, weakens, refutes, or qualifies.
+
+Workers may run experiments, critics may find flaws, and managers may accept, reject, qualify, or supersede reports. Only the accepted interpretation becomes evidence, and claims remain scoped to the evidence records that support them. An autonomous experiment does not silently become a paper claim.
+
+Negative and stale results are preserved. A failed run can be invalid, inconclusive, or informative depending on the manager resolution. Old claims can be marked historical or superseded instead of deleted. The goal is not to preserve every token of conversation, but the decisions and observations needed to audit the research argument.
+

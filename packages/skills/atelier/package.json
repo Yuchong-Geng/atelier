@@ -1,0 +1,19 @@
+{
+  "name": "atelier-skill",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Atelier filesystem skill helper scripts.",
+  "license": "MIT",
+  "bin": {
+    "atelier": "scripts/cli.mjs",
+    "research-agent": "scripts/cli.mjs"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "8.4.3",
+    "js-yaml": "^4.1.1"
+  },
+  "scripts": {
+    "test": "node --test scripts/*.test.mjs"
+  }
+}

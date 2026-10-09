@@ -1,0 +1,38 @@
+{
+  "name": "atelier",
+  "version": "0.1.0",
+  "description": "File-backed Atelier workflow for reusable AI-assisted research across Codex, Claude, and other agents.",
+  "author": {
+    "name": "Atelier Project"
+  },
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "agents",
+    "codex",
+    "claude",
+    "skills",
+    "evidence",
+    "experiments",
+    "second-opinion"
+  ],
+  "skills": "./packages/skills/",
+  "interface": {
+    "displayName": "Atelier",
+    "shortDescription": "File-backed research workflow with packets, evidence, claims, and second opinions",
+    "longDescription": "Use Atelier to initialize and operate a project-local .atelier control plane for research ideas, evaluation design, work packets, evidence records, claim updates, deliverable planning, and cross-platform critique.",
+    "developerName": "Atelier Project",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Initialize Atelier in this project.",
+      "Check the current Atelier status.",
+      "Create a second-opinion review packet."
+    ],
+    "screenshots": []
+  }
+}
